@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - Veena Public School</title>
+    <link rel="icon" type="image/png" href="/images/logos.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lightgallery.min.css">
+</head>
+<body>
+    <!-- Header (Same as Homepage) -->
+    <header class="header">
+        <div class="container">
+            <div class="logo-container">
+                <img src="images/logo.png" alt="Veena Public School Logo" class="logo">
+                <div class="school-info">
+                    <h1>Veena Public School</h1>
+                    <p>Ukhai, Siwan, Bihar - 841227</p>
+                    <p>Recognized by the Government of Bihar</p>
+                </div>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="admissions.html">Admissions</a></li>
+                    <li><a href="fee-structure.html">Fee Structure</a></li>
+                    <li><a href="results.html">Results</a></li>
+                    <li><a href="facilities.html">Facilities</a></li>
+                    <li><a href="gallery.html" class="active">Gallery</a></li>
+                    <li><a href="notifications.html">Notifications</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Gallery Banner -->
+    <section class="page-banner" style="background-image: linear-gradient(rgba(26, 75, 142, 0.8), rgba(26, 75, 142, 0.8)), url('images/gallery-banner.jpg');">
+        <div class="container">
+            <h1>Photo Gallery</h1>
+            <p>Capturing moments of learning, joy, and growth</p>
+        </div>
+    </section>
+
+    <!-- Introduction Section -->
+    <section class="gallery-intro">
+        <div class="container">
+            <h2>Welcome to Our School Gallery</h2>
+            <p>Welcome to the Photo Gallery of Veena Public School, where every picture tells a story of learning, joy, and growth. From classrooms to cultural celebrations, science experiments to sports events — our gallery showcases the vibrant life of our students and the spirit of our school.</p>
+        </div>
+    </section>
+
+    <!-- Gallery Categories -->
+    <section class="gallery-categories">
+        <div class="container">
+            <h2>What You'll Find in Our Gallery</h2>
+            <div class="categories-grid">
+                <div class="category-card">
+                    <div class="category-icon">🏫</div>
+                    <h3>School Infrastructure</h3>
+                    <p>Classrooms, library, computer lab, science corner, clean toilets, playground, and school building</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">📚</div>
+                    <h3>Academic Activities</h3>
+                    <p>Students during lessons, practical work, monthly tests, and doubt-clearing sessions</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">🧘</div>
+                    <h3>Yoga & Sports</h3>
+                    <p>Yoga sessions, morning exercises, games like cricket, kho-kho, and running events</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">🎭</div>
+                    <h3>Cultural Programs</h3>
+                    <p>Celebrations of Independence Day, Republic Day, Annual Function, Saraswati Puja, and more</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">🎨</div>
+                    <h3>Creative Activities</h3>
+                    <p>Drawing competitions, craft work, quiz competitions, storytelling, and school exhibitions</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">🏆</div>
+                    <h3>Student Achievements</h3>
+                    <p>Students being recognized for excellence in academics, arts, and sports</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Filter -->
+    <section class="gallery-filter">
+        <div class="container">
+            <div class="filter-options">
+                <button class="filter-btn active" data-filter="all">All Photos</button>
+                <button class="filter-btn" data-filter="infrastructure">Infrastructure</button>
+                <button class="filter-btn" data-filter="academics">Academics</button>
+                <button class="filter-btn" data-filter="sports">Sports</button>
+                <button class="filter-btn" data-filter="cultural">Cultural</button>
+                <button class="filter-btn" data-filter="events">Special Events</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Photo Gallery -->
+    <section class="photo-gallery">
+        <div class="container">
+            <div class="gallery-container" id="lightgallery">
+                <!-- Infrastructure -->
+                <a href="images/gallery/infrastructure-1.jpg" class="gallery-item infrastructure" data-sub-html="<h4>Our School Building</h4><p>The main building of Veena Public School, Ukhai</p>">
+                    <img src="images/gallery/thumb-infrastructure-1.jpg" alt="School Building">
+                    <div class="gallery-overlay">
+                        <h3>School Building</h3>
+                    </div>
+                </a>
+                <a href="images/gallery/infrastructure-2.jpg" class="gallery-item infrastructure" data-sub-html="<h4>Classroom</h4><p>Students learning in our airy classroom</p>">
+                    <img src="images/gallery/thumb-infrastructure-2.jpg" alt="Classroom">
+                    <div class="gallery-overlay">
+                        <h3>Classroom</h3>
+                    </div>
+                </a>
+                
+                <!-- Academics -->
+                <a href="images/gallery/academics-1.jpg" class="gallery-item academics" data-sub-html="<h4>Science Class</h4><p>Students performing a science experiment</p>">
+                    <img src="images/gallery/thumb-academics-1.jpg" alt="Science Class">
+                    <div class="gallery-overlay">
+                        <h3>Science Class</h3>
+                    </div>
+                </a>
+                <a href="images/gallery/academics-2.jpg" class="gallery-item academics" data-sub-html="<h4>Computer Lab</h4><p>Students learning basic computer skills</p>">
+                    <img src="images/gallery/thumb-academics-2.jpg" alt="Computer Lab">
+                    <div class="gallery-overlay">
+                        <h3>Computer Lab</h3>
+                    </div>
+                </a>
+                
+                <!-- Sports -->
+                <a href="images/gallery/sports-1.jpg" class="gallery-item sports" data-sub-html="<h4>Yoga Session</h4><p>Morning yoga for health and wellness</p>">
+                    <img src="images/gallery/thumb-sports-1.jpg" alt="Yoga Session">
+                    <div class="gallery-overlay">
+                        <h3>Yoga Session</h3>
+                    </div>
+                </a>
+                <a href="images/gallery/sports-2.jpg" class="gallery-item sports" data-sub-html="<h4>Sports Day</h4><p>Annual sports competition</p>">
+                    <img src="images/gallery/thumb-sports-2.jpg" alt="Sports Day">
+                    <div class="gallery-overlay">
+                        <h3>Sports Day</h3>
+                    </div>
+                </a>
+                
+                <!-- Cultural -->
+                <a href="images/gallery/cultural-1.jpg" class="gallery-item cultural" data-sub-html="<h4>Annual Day</h4><p>Students performing on Annual Day</p>">
+                    <img src="images/gallery/thumb-cultural-1.jpg" alt="Annual Day">
+                    <div class="gallery-overlay">
+                        <h3>Annual Day</h3>
+                    </div>
+                </a>
+                <a href="images/gallery/cultural-2.jpg" class="gallery-item cultural" data-sub-html="<h4>Republic Day</h4><p>Flag hoisting ceremony</p>">
+                    <img src="images/gallery/thumb-cultural-2.jpg" alt="Republic Day">
+                    <div class="gallery-overlay">
+                        <h3>Republic Day</h3>
+                    </div>
+                </a>
+                
+                <!-- Events -->
+                <a href="images/gallery/events-1.jpg" class="gallery-item events" data-sub-html="<h4>Prize Distribution</h4><p>Recognizing student achievements</p>">
+                    <img src="images/gallery/thumb-events-1.jpg" alt="Prize Distribution">
+                    <div class="gallery-overlay">
+                        <h3>Prize Distribution</h3>
+                    </div>
+                </a>
+                <a href="images/gallery/events-2.jpg" class="gallery-item events" data-sub-html="<h4>Parent Meeting</h4><p>Parents interacting with teachers</p>">
+                    <img src="images/gallery/thumb-events-2.jpg" alt="Parent Meeting">
+                    <div class="gallery-overlay">
+                        <h3>Parent Meeting</h3>
+                    </div>
+                </a>
+                
+                <!-- More sample images (add more as needed) -->
+                <a href="images/gallery/infrastructure-3.jpg" class="gallery-item infrastructure" data-sub-html="<h4>Playground</h4><p>Our school playground</p>">
+                    <img src="images/gallery/thumb-infrastructure-3.jpg" alt="Playground">
+                    <div class="gallery-overlay">
+                        <h3>Playground</h3>
+                    </div>
+                </a>
+                <a href="images/gallery/academics-3.jpg" class="gallery-item academics" data-sub-html="<h4>Library</h4><p>Students reading in the library</p>">
+                    <img src="images/gallery/thumb-academics-3.jpg" alt="Library">
+                    <div class="gallery-overlay">
+                        <h3>Library</h3>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Organization -->
+    <section class="gallery-organization">
+        <div class="container">
+            <h2>Gallery Organization</h2>
+            <div class="organization-grid">
+                <div class="org-card">
+                    <div class="org-icon">📅</div>
+                    <h3>Albums by Year</h3>
+                    <p>2022–23, 2023–24, etc.</p>
+                </div>
+                <div class="org-card">
+                    <div class="org-icon">📌</div>
+                    <h3>Event Highlights</h3>
+                    <p>Annual Day, Science Fair, Cultural Fest</p>
+                </div>
+                <div class="org-card">
+                    <div class="org-icon">📂</div>
+                    <h3>Categories</h3>
+                    <p>Academics, Sports, Yoga, Infrastructure, Celebrations</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer (Same as Homepage) -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-column">
+                <h3>Contact Us</h3>
+                <p>Veena Public School</p>
+                <p>Ukhai, Siwan, Bihar - 841227</p>
+                <p>Email: vpsukhai@gmail.com</p>
+                <p>Nearest Railway Station: Siwan Jn (8 KM)</p>
+            </div>
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="admissions.html">Admissions</a></li>
+                    <li><a href="fee-structure.html">Fee Structure</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Important Links</h3>
+                <ul>
+                    <li><a href="results.html">Results</a></li>
+                    <li><a href="facilities.html">Facilities</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span id="current-year"></span> Veena Public School. All Rights Reserved. Managed by Veena Educational and Technical Welfare Society.</p>
+        </div>
+    </footer>
+
+    <!-- Lightgallery JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lg-zoom/2.7.1/lg-zoom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lg-fullscreen/2.7.1/lg-fullscreen.min.js"></script>
+    
+    <script src="js/main.js"></script>
+    <script src="js/gallery.js"></script>
+</body>
+</html>
