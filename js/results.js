@@ -16,24 +16,34 @@ document.addEventListener('DOMContentLoaded', function() {
     // Set current session as default
     sessionSelect.value = currentSession;
     
-    // Load results data
+    // Load results data based on session and exam type
     let resultsData = {};
     
-    // Fetch results data from JSON
-    fetch('data/results.json')
-        .then(response => response.json())
-        .then(data => {
-            resultsData = data;
-        })
-        .catch(error => {
-            console.error('Error loading results:', error);
-            resultsContainer.innerHTML = `
-                <div class="no-results">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <p>Failed to load results. Please try again later.</p>
-                </div>
-            `;
-        });
+    // Function to load appropriate JSON file
+    function loadResultsData(session, examType) {
+        const filename = `data/results-${session}-${examType.toLowerCase().replace(' ', '-')}.json`;
+        
+        fetch(filename)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Results not found for selected criteria');
+                }
+                return response.json();
+            })
+            .then(data => {
+                resultsData = data;
+            })
+            .catch(error => {
+                console.error('Error loading results:', error);
+                resultsContainer.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>No results found for the selected session and exam type.</p>
+                        <p>Please check back later or contact school administration.</p>
+                    </div>
+                `;
+            });
+    }
     
     // Search function
     function searchResults() {
@@ -52,26 +62,32 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Filter results based on selections
-        let filteredResults = [];
-        const sessionKey = `Session ${session}`;
+        // Load data for selected session and exam
+        loadResultsData(session, exam);
         
-        if (resultsData[sessionKey]) {
-            filteredResults = resultsData[sessionKey].filter(result => {
-                // Match class if selected
-                const classMatch = !classVal || result.Class === classVal;
-                
-                // Match search term if entered
-                const searchMatch = !searchTerm || 
-                    result.Name.toLowerCase().includes(searchTerm) || 
-                    result['Roll Number'].toString().includes(searchTerm);
-                
-                return classMatch && searchMatch;
-            });
-        }
-        
-        // Display results
-        displayResults(filteredResults, exam, session);
+        // Small delay to ensure data is loaded
+        setTimeout(() => {
+            // Filter results based on selections
+            let filteredResults = [];
+            const sessionKey = `Session ${session}`;
+            
+            if (resultsData[sessionKey]) {
+                filteredResults = resultsData[sessionKey].filter(result => {
+                    // Match class if selected
+                    const classMatch = !classVal || result.Class === classVal;
+                    
+                    // Match search term if entered
+                    const searchMatch = !searchTerm || 
+                        result.Name.toLowerCase().includes(searchTerm) || 
+                        result['Roll Number'].toString().includes(searchTerm);
+                    
+                    return classMatch && searchMatch;
+                });
+            }
+            
+            // Display results
+            displayResults(filteredResults, exam, session);
+        }, 100);
     }
     
     // Display results function
@@ -81,6 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="no-results">
                     <i class="fas fa-search"></i>
                     <p>No results found matching your criteria</p>
+                    <p>Please try different search parameters</p>
                 </div>
             `;
             printArea.innerHTML = '';
@@ -88,7 +105,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         let resultsHTML = '';
-        let printHTML = '';
         
         results.forEach(result => {
             // Determine subjects based on class
@@ -100,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="result-card" id="result-${result['Roll Number']}">
                     <div class="result-header">
                         <h3>${result.Name} - ${examType} Exam Result</h3>
-                        <button class="print-btn no-print" onclick="printResult('result-${result['Roll Number']}', '${examType}', '${session}')">
+                        <button class="print-btn no-print" onclick="printIndividualResult('${result['Roll Number']}', '${examType}', '${session}')">
                             <i class="fas fa-print"></i> Print
                         </button>
                     </div>
@@ -118,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <thead>
                                 <tr>
                                     <th>Subject</th>
-                                    ${totalMarks ? '<th>Full Marks</th>' : ''}
+                                    <th>Full Marks</th>
                                     <th>Pass Marks</th>
                                     <th>Marks Obtained</th>
                                 </tr>
@@ -127,7 +143,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 ${subjects.map(subject => `
                                     <tr>
                                         <td>${subject.name}</td>
-                                        ${totalMarks ? `<td>${subject.fullMarks}</td>` : ''}
+                                        <td>${subject.fullMarks}</td>
                                         <td>${subject.passMarks}</td>
                                         <td>${result[subject.key] || 'N/A'}</td>
                                     </tr>
@@ -138,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="result-summary">
                             <div class="summary-item">
                                 <h4>Total Marks</h4>
-                                <p>${result.TOTAL} ${totalMarks ? `/ ${totalMarks}` : ''}</p>
+                                <p>${result.TOTAL} / ${totalMarks}</p>
                             </div>
                             <div class="summary-item">
                                 <h4>Percentage</h4>
@@ -215,67 +231,213 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Print function (added to window for button click)
-    window.printResult = function(resultId, examType, session) {
-        const resultElement = document.getElementById(resultId);
-        const resultData = resultsData[`Session ${session}`].find(r => 
-            `result-${r['Roll Number']}` === resultId
-        );
+    window.printIndividualResult = function(rollNumber, examType, session) {
+        // Reload data to ensure we have the latest
+        loadResultsData(session, examType);
         
-        const subjects = getSubjectsForClass(resultData.Class);
-        const totalMarks = getTotalMarksForClass(resultData.Class);
-        
-        printArea.innerHTML = `
-            <div class="print-result">
-                <div class="print-header">
-                    <img src="images/logo.png" alt="Veena Public School Logo">
-                    <div>
-                        <h2>Veena Public School</h2>
-                        <p>Ukhai, Siwan, Bihar - 841227</p>
-                        <h3>${examType} Examination - Session ${session}</h3>
+        setTimeout(() => {
+            const sessionKey = `Session ${session}`;
+            const resultData = resultsData[sessionKey]?.find(r => 
+                r['Roll Number'].toString() === rollNumber
+            );
+            
+            if (!resultData) {
+                alert('Result data not found for printing');
+                return;
+            }
+            
+            const subjects = getSubjectsForClass(resultData.Class);
+            const totalMarks = getTotalMarksForClass(resultData.Class);
+            
+            const printHTML = `
+                <div class="print-result">
+                    <div class="print-header">
+                        <img src="images/logo.png" alt="Veena Public School Logo" onerror="this.style.display='none'">
+                        <div>
+                            <h2>Veena Public School</h2>
+                            <p>Ukhai, Siwan, Bihar - 841227</p>
+                            <h3>${examType} Examination ${session}</h3>
+                            <p>Report Card</p>
+                        </div>
+                    </div>
+                    
+                    <div class="student-info">
+                        <div class="info-grid">
+                            <div><strong>Student Name:</strong> ${resultData.Name}</div>
+                            <div><strong>Class:</strong> ${resultData.Class} ${resultData.Section || ''}</div>
+                            <div><strong>Roll No:</strong> ${resultData['Roll Number']}</div>
+                            <div><strong>Admission No:</strong> ${resultData['Admission Number'] || 'N/A'}</div>
+                            <div><strong>Father's Name:</strong> ${resultData['Fathers Name']}</div>
+                            <div><strong>Mother's Name:</strong> ${resultData['Mothers Name']}</div>
+                            <div><strong>Date of Birth:</strong> ${resultData.DOB}</div>
+                        </div>
+                    </div>
+                    
+                    <table class="result-table">
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Full Marks</th>
+                                <th>Pass Marks</th>
+                                <th>Marks Obtained</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${subjects.map(subject => `
+                                <tr>
+                                    <td>${subject.name}</td>
+                                    <td>${subject.fullMarks}</td>
+                                    <td>${subject.passMarks}</td>
+                                    <td>${resultData[subject.key] || 'N/A'}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                    
+                    <div class="result-summary">
+                        <div class="summary-grid">
+                            <div class="summary-item">
+                                <strong>Total Marks:</strong> ${resultData.TOTAL} / ${totalMarks}
+                            </div>
+                            <div class="summary-item">
+                                <strong>Percentage:</strong> ${resultData.PERCENTAGE}%
+                            </div>
+                            <div class="summary-item">
+                                <strong>Division:</strong> ${resultData.DIVISION}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="print-footer">
+                        <div class="signature-area">
+                            <div class="signature">
+                                <p>Class Teacher</p>
+                            </div>
+                            <div class="signature">
+                                <p>Principal</p>
+                            </div>
+                        </div>
+                        <p class="print-date">Generated on: ${new Date().toLocaleDateString()}</p>
+                        <p class="disclaimer">Note: This is a computer generated result. For official purposes, please contact school administration.</p>
                     </div>
                 </div>
-                
-                <div class="student-info">
-                    <div><strong>Name:</strong> ${resultData.Name}</div>
-                    <div><strong>Class:</strong> ${resultData.Class} ${resultData.Section || ''}</div>
-                    <div><strong>Roll No:</strong> ${resultData['Roll Number']}</div>
-                    <div><strong>Admission No:</strong> ${resultData['Admission Number'] || 'N/A'}</div>
-                </div>
-                
-                <table class="result-table">
-                    <thead>
-                        <tr>
-                            <th>Subject</th>
-                            <th>Marks Obtained</th>
-                            ${totalMarks ? '<th>Full Marks</th>' : ''}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${subjects.map(subject => `
-                            <tr>
-                                <td>${subject.name}</td>
-                                <td>${resultData[subject.key] || 'N/A'}</td>
-                                ${totalMarks ? `<td>${subject.fullMarks}</td>` : ''}
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-                
-                <div class="result-summary">
-                    <div><strong>Total Marks:</strong> ${resultData.TOTAL} ${totalMarks ? `/ ${totalMarks}` : ''}</div>
-                    <div><strong>Percentage:</strong> ${resultData.PERCENTAGE}%</div>
-                    <div><strong>Division:</strong> ${resultData.DIVISION}</div>
-                </div>
-                
-                <div class="print-footer">
-                    <p>Generated on: ${new Date().toLocaleDateString()}</p>
-                    <p>This is a computer generated result and doesn't require signature.</p>
-                    <p class="disclaimer">Note: This result is not valid for official purposes.</p>
-                </div>
-            </div>
-        `;
-        
-        window.print();
+            `;
+            
+            // Create a new window for printing
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Result - ${resultData.Name}</title>
+                    <style>
+                        body { 
+                            font-family: Arial, sans-serif; 
+                            margin: 20px; 
+                            color: #000;
+                        }
+                        .print-result { 
+                            max-width: 800px; 
+                            margin: 0 auto; 
+                        }
+                        .print-header { 
+                            text-align: center; 
+                            margin-bottom: 30px; 
+                            border-bottom: 2px solid #333;
+                            padding-bottom: 20px;
+                        }
+                        .print-header img { 
+                            height: 80px; 
+                            margin-bottom: 10px;
+                        }
+                        .print-header h2 { 
+                            margin: 5px 0; 
+                            color: #1a4b8e;
+                        }
+                        .print-header h3 { 
+                            margin: 10px 0; 
+                            color: #333;
+                        }
+                        .student-info { 
+                            margin: 20px 0; 
+                        }
+                        .info-grid {
+                            display: grid;
+                            grid-template-columns: repeat(2, 1fr);
+                            gap: 10px;
+                        }
+                        .result-table { 
+                            width: 100%; 
+                            border-collapse: collapse; 
+                            margin: 20px 0; 
+                        }
+                        .result-table th, .result-table td { 
+                            border: 1px solid #000; 
+                            padding: 8px; 
+                            text-align: center; 
+                        }
+                        .result-table th { 
+                            background-color: #f0f0f0; 
+                        }
+                        .result-summary { 
+                            margin: 20px 0; 
+                        }
+                        .summary-grid {
+                            display: grid;
+                            grid-template-columns: repeat(3, 1fr);
+                            gap: 20px;
+                            text-align: center;
+                        }
+                        .summary-item {
+                            padding: 10px;
+                            background: #f8f9fa;
+                            border-radius: 5px;
+                        }
+                        .print-footer { 
+                            margin-top: 40px; 
+                            text-align: center; 
+                        }
+                        .signature-area {
+                            display: flex;
+                            justify-content: space-around;
+                            margin: 40px 0 20px 0;
+                        }
+                        .signature {
+                            border-top: 1px solid #000;
+                            width: 150px;
+                            text-align: center;
+                            padding-top: 5px;
+                        }
+                        .print-date {
+                            font-size: 0.9em;
+                            color: #666;
+                        }
+                        .disclaimer {
+                            font-size: 0.8em;
+                            color: #999;
+                            margin-top: 20px;
+                        }
+                        @media print {
+                            body { margin: 0; }
+                            .print-result { margin: 0; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    ${printHTML}
+                    <script>
+                        window.onload = function() {
+                            window.print();
+                            setTimeout(function() {
+                                window.close();
+                            }, 500);
+                        };
+                    <\/script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+        }, 200);
     };
     
     // Event listeners

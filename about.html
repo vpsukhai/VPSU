@@ -142,6 +142,19 @@
         </div>
     </footer>
 
+    // Check if counter exists in localStorage
+let count = localStorage.getItem('pageVisits');
+
+// Initialize or increment
+if (count === null) {
+    count = 1;
+} else {
+    count = parseInt(count) + 1;
+}
+
+// Update storage and display
+localStorage.setItem('pageVisits', count);
+document.getElementById('visitor-count').textContent = count;
     <script src="js/main.js"></script>
 </body>
 </html>

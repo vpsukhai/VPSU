@@ -1,0 +1,29 @@
+{
+    "Session 2023-24":[
+  {
+    "Class": "I",
+    "DOB": "17/12/2013",
+    "Roll Number": 2,
+    "Section": "A",
+    "Name": "TEST",
+    "Mothers Name": "TEST",
+    "Fathers Name": "NULL",
+    "Admission Number": "NA",
+    "HINDI": 12,
+    "ENGLISH": 78,
+    "MATHS": 68,
+    "SCIENCE": 76,
+    "SOCIAL SCIENCE": 78,
+    "SNK/URDU": 70,
+    "G.K": 75,
+    "COMPUTER": 80,
+    "DRAWING": 37,
+    "H.CRAFT/ SCA/Music": 35,
+    "ORAL": 30,
+    "PT Uniform": 35,
+    "TOTAL": 600,
+    "PERCENTAGE": 74.1,
+    "DIVISION": "1st Div."
+  }
+]
+}
